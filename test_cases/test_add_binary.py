@@ -1,3 +1,4 @@
+import pytest
 from src.app import main
 
 def test_canary():
@@ -25,4 +26,23 @@ def test_compare_with_lib():
   #bin function output
   assert "0b{}".format(ret) == bin_sum
 
-  
+#creating an iterable of data params:
+inputs = [("111011", "110"), ('111110111', "111001"), ('10111', "11011")]
+
+@pytest.mark.parametrize('arg1, arg2', inputs)
+def test_compare_with_lib_dynamic(arg1, arg2):
+  # Given known cases 111110111 and 111001
+  # using another different convertion way to sum in binary
+  bin1 = "0b{}".format(arg1)
+  bin2 = "0b{}".format(arg2)
+
+  #converting binary input into integer and then summing
+  int_sum = int(bin1, 2) + int(bin2, 2)
+
+  #re converting the interger result into binary again
+  bin_sum = bin(int_sum)
+
+  ret = main(arg1, arg2)
+  #adding 0b to the string to be in same binary string format to match
+  #bin function output
+  assert "0b{}".format(ret) == bin_sum
